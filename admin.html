@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#020617">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel — GATE O ID</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2316a34a'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'>G</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e',
+                            600: '#16a34a', 700: '#15803d', 900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen antialiased">
+
+    <!-- Login Gate -->
+    <div id="loginGate" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 w-full max-w-sm shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-brand-500/30 mb-4">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h1 class="text-xl font-bold text-white">Admin Panel</h1>
+                <p class="text-slate-500 text-xs mt-1">Masuk buat kelola produk</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password"
+                           placeholder="Masukkan password admin"
+                           class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                </div>
+                <p id="loginError" class="hidden text-xs text-rose-500"></p>
+                <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-lg transition">
+                    Masuk
+                </button>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t border-slate-800 text-center">
+                <a href="index.html" class="text-xs text-slate-500 hover:text-slate-300 transition">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Balik ke Beranda
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin App (hidden by default) -->
+    <div id="adminApp" class="hidden min-h-screen flex flex-col">
+        
+        <!-- Navbar -->
+        <header class="sticky top-0 z-40 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold">
+                        G
+                    </div>
+                    <div>
+                        <span class="text-sm font-bold text-white">GATE O ID</span>
+                        <span class="block text-[10px] text-brand-500 font-medium tracking-widest uppercase -mt-0.5">Admin Panel</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="index.html" class="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-eye text-brand-500"></i>
+                        <span class="hidden sm:inline">Lihat Website</span>
+                    </a>
+                    <button id="logoutBtn" class="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-rose-900/40 border border-slate-700 hover:border-rose-800 text-slate-300 hover:text-rose-300 rounded-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="hidden sm:inline">Keluar</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+            
+            <!-- Stats -->
+            <div id="statsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- Add/Edit Form -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-plus-circle text-brand-500"></i>
+                    <h2 id="formTitle" class="font-bold text-white">Tambah Produk Baru</h2>
+                </div>
+
+                <form id="productForm" class="space-y-4">
+                    <input type="hidden" id="productId">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Nama Produk *</label>
+                            <input type="text" id="prodTitle" required maxlength="120" placeholder="Contoh: Lampu LED Desk"
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Kategori *</label>
+                            <input type="text" id="prodCategory" required maxlength="40" list="categoryOptions" placeholder="Contoh: Elektronik"
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                            <datalist id="categoryOptions"></datalist>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">URL Gambar</label>
+                            <input type="url" id="prodImage" placeholder="https://..." 
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Link Afiliasi *</label>
+                            <input type="url" id="prodLink" required placeholder="https://shope.ee/..." 
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Badge Khusus</label>
+                            <select id="prodBadge" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="">Tanpa Badge</option>
+                                <option value="Hot Item">🔥 Hot Item</option>
+                                <option value="Rekomendasi">⭐ Rekomendasi</option>
+                                <option value="Promo">🏷️ Promo Limit</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Deskripsi Singkat</label>
+                            <input type="text" id="prodDesc" maxlength="200" placeholder="Kualitas bagus, tahan lama..." 
+                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 justify-end pt-2">
+                        <button type="button" id="cancelFormBtn" class="px-4 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">Batal</button>
+                        <button type="submit" class="px-4 py-2 text-xs font-medium bg-brand-600 hover:bg-brand-500 text-white rounded-lg transition">Simpan Produk</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Backup / Restore -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-200">Backup / Restore</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Ekspor data ke file JSON atau impor kembali.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="exportBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Ekspor
+                    </button>
+                    <label class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-upload"></i> Impor
+                        <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+                    </label>
+                    <button id="resetBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-rose-900/40 text-slate-200 hover:text-rose-300 rounded-lg border border-slate-700 hover:border-rose-800 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+            </section>
+
+            <!-- Product List -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-200">Daftar Produk</h3>
+                    <span id="productCount" class="text-xs text-slate-500"></span>
+                </div>
+                <div id="adminProductList" class="space-y-2"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite">
+        <i class="fa-solid fa-circle-check text-brand-500 text-lg"></i>
+        <span id="toastMessage">Notifikasi</span>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 id="confirmTitle" class="font-bold text-white mb-2">Konfirmasi</h3>
+            <p id="confirmMessage" class="text-sm text-slate-400 mb-5">Yakin?</p>
+            <div class="flex gap-2 justify-end">
+                <button id="confirmCancel" class="px-4 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">Batal</button>
+                <button id="confirmOk" class="px-4 py-2 text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition">Ya, Lanjut</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
