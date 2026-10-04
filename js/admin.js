@@ -318,7 +318,107 @@
         GPToast.show("Backup berhasil di-download!");
     }
 
-    async function handleImport(e) {
+    async function handleCsvImport(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        document.body.style.cursor = "wait";
+        const text = await file.text();
+        document.body.style.cursor = "default";
+        e.target.value = "";
+
+        try {
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
+            if (lines.length < 2) {
+                GPToast.show("Format CSV kosong atau tidak valid", "error");
+                return;
+            }
+
+            function parseCsvLine(line) {
+                const result = [];
+                let current = "";
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current.trim());
+                        current = "";
+                    } else {
+                        current += char;
+                    }
+                }
+                result.push(current.trim());
+                return result.map(val => val.replace(/^["']|["']$/g, "").trim());
+            }
+
+            const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase());
+            const getIndex = (names) => {
+                for (const name of names) {
+                    const idx = headers.indexOf(name);
+                    if (idx !== -1) return idx;
+                }
+                return -1;
+            };
+
+            const idxTitle = getIndex(["title", "nama", "nama produk", "product"]);
+            const idxCat = getIndex(["category", "kategori"]);
+            const idxImg = getIndex(["image", "gambar", "img", "photo"]);
+            const idxLink = getIndex(["link", "url", "affiliate", "affiliate link"]);
+            const idxBadge = getIndex(["badge"]);
+            const idxDesc = getIndex(["desc", "description", "deskripsi"]);
+
+            if (idxTitle === -1 || idxLink === -1) {
+                GPToast.show("CSV wajib memiliki kolom 'title' dan 'link'", "error");
+                return;
+            }
+
+            const newProducts = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cols = parseCsvLine(lines[i]);
+                const title = cols[idxTitle] || "";
+                const link = cols[idxLink] || "";
+                if (!title || !link) continue;
+
+                newProducts.push({
+                    id: "csv-" + Math.random().toString(36).substring(2, 9),
+                    title: title,
+                    category: idxCat !== -1 && cols[idxCat] ? cols[idxCat] : "Umum",
+                    image: idxImg !== -1 ? cols[idxImg] : "",
+                    link: link,
+                    badge: idxBadge !== -1 ? cols[idxBadge] : "",
+                    desc: idxDesc !== -1 ? cols[idxDesc] : "",
+                    clicks: 0
+                });
+            }
+
+            if (newProducts.length === 0) {
+                GPToast.show("Tidak ada produk valid ditemukan di file CSV", "error");
+                return;
+            }
+
+            const ok = await showConfirm(
+                "Impor CSV?",
+                `Ditemukan ${newProducts.length} produk dari CSV. Ganti semua produk saat ini dengan data CSV?`
+            );
+
+            if (!ok) {
+                GPToast.show("Impor CSV dibatalkan", "warning");
+                return;
+            }
+
+            state.products = newProducts;
+            GPStorage.save(state.products);
+            renderStats();
+            renderCategoryOptions();
+            renderProductList();
+            GPToast.show(`${newProducts.length} produk berhasil di-impor dari CSV!`);
+        } catch (err) {
+            console.error("CSV parse error:", err);
+            GPToast.show("Gagal memparsing file CSV", "error");
+        }
+    }
         const file = e.target.files[0];
         if (!file) return;
 
@@ -402,6 +502,7 @@
         // Backup / restore
         els.exportBtn?.addEventListener("click", handleExport);
         els.importFile?.addEventListener("change", handleImport);
+        document.getElementById("importCsvFile")?.addEventListener("change", handleCsvImport);
         els.resetBtn?.addEventListener("click", handleReset);
 
         // Confirm modal

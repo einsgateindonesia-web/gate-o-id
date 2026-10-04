@@ -165,16 +165,20 @@
             <!-- Backup / Restore -->
             <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-3">
                 <div>
-                    <h3 class="text-sm font-semibold text-slate-200">Backup / Restore</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Ekspor data ke file JSON atau impor kembali.</p>
+                    <h3 class="text-sm font-semibold text-slate-200">Backup / Restore / CSV</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Ekspor/Impor JSON atau Impor langsung dari Spreadsheet (CSV).</p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex flex-wrap gap-2">
                     <button id="exportBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-download"></i> Ekspor
+                        <i class="fa-solid fa-download"></i> Ekspor JSON
                     </button>
                     <label class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition cursor-pointer flex items-center gap-1.5">
-                        <i class="fa-solid fa-upload"></i> Impor
+                        <i class="fa-solid fa-upload"></i> Impor JSON
                         <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+                    </label>
+                    <label class="px-3 py-1.5 text-xs bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 rounded-lg border border-emerald-800/80 transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-csv"></i> Impor CSV
+                        <input type="file" id="importCsvFile" accept=".csv,text/csv" class="hidden">
                     </label>
                     <button id="resetBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-rose-900/40 text-slate-200 hover:text-rose-300 rounded-lg border border-slate-700 hover:border-rose-800 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-rotate-left"></i> Reset

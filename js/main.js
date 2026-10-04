@@ -24,6 +24,15 @@
             searchInput.addEventListener("input", (e) => onSearch(e.target.value));
         }
 
+        // ---------- Event: Sort select ----------
+        const sortSelect = document.getElementById("sortSelect");
+        if (sortSelect) {
+            sortSelect.addEventListener("change", (e) => {
+                GPProducts.state.sortOption = e.target.value;
+                GPProducts.renderGrid();
+            });
+        }
+
         // ---------- Event: Category (delegation) ----------
         const categoryContainer = document.getElementById("categoryContainer");
         if (categoryContainer) {
