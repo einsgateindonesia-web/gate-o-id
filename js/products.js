@@ -8,7 +8,8 @@ window.GPProducts = (function () {
     const state = {
         products: [],
         selectedCategory: window.GATEO_CONFIG.ALL_CATEGORY,
-        searchQuery: ""
+        searchQuery: "",
+        sortOption: "newest"
     };
 
     /* ---------- Default sample data ---------- */
@@ -81,13 +82,25 @@ window.GPProducts = (function () {
         const q = state.searchQuery.toLowerCase().trim();
         const cat = state.selectedCategory.toLowerCase();
 
-        return state.products.filter(p => {
+        const filtered = state.products.filter(p => {
             const matchesCategory = state.selectedCategory === window.GATEO_CONFIG.ALL_CATEGORY
                 || p.category.toLowerCase() === cat;
             const matchesSearch = !q
                 || p.title.toLowerCase().includes(q)
                 || (p.desc && p.desc.toLowerCase().includes(q));
             return matchesCategory && matchesSearch;
+        });
+
+        // Sorting
+        return filtered.sort((a, b) => {
+            if (state.sortOption === "popular") {
+                return (b.clicks || 0) - (a.clicks || 0);
+            } else if (state.sortOption === "title-asc") {
+                return a.title.localeCompare(b.title);
+            } else {
+                // newest: urutan di array atau berdasarkan id/waktu masuk
+                return 0; // pertahankan urutan penyimpanan default (terbaru di atas jika unshifted)
+            }
         });
     }
 

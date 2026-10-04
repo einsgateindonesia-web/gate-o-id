@@ -90,10 +90,18 @@
         </div>
     </section>
 
-    <!-- Filters -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 mb-8">
-        <div id="categoryContainer" class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+    <!-- Filters & Sorting -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div id="categoryContainer" class="flex items-center justify-start gap-2 overflow-x-auto pb-2 scrollbar-none flex-1 w-full sm:w-auto">
             <!-- Rendered by JS -->
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto min-w-[180px]">
+            <span class="text-xs text-slate-400 whitespace-nowrap"><i class="fa-solid fa-sort mr-1 text-brand-500"></i> Urutkan:</span>
+            <select id="sortSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500 transition">
+                <option value="newest">Terbaru</option>
+                <option value="popular">Paling Sering Diklik</option>
+                <option value="title-asc">Nama (A-Z)</option>
+            </select>
         </div>
     </section>
 
