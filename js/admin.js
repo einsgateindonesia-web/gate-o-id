@@ -110,8 +110,8 @@
     /* =========================================================
        Load & Render
        ========================================================= */
-    function loadAndRender() {
-        state.products = GPStorage.load([]);
+    async function loadAndRender() {
+        state.products = await GPStorage.load([]);
         renderStats();
         renderCategoryOptions();
         renderProductList();
@@ -232,7 +232,7 @@
         els.form.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function handleSave(e) {
+    async function handleSave(e) {
         e.preventDefault();
 
         const data = {
@@ -259,33 +259,41 @@
         }
 
         const editingId = els.productId.value;
+        const password = GPAuth.getPassword();
 
         if (editingId) {
-            // Edit
-            const idx = state.products.findIndex(p => p.id === editingId);
-            if (idx !== -1) {
-                state.products[idx] = {
-                    ...state.products[idx],
-                    ...data,
-                    clicks: state.products[idx].clicks || 0
-                };
+            const existing = state.products.find(p => p.id === editingId);
+            const payload = {
+                id: editingId,
+                _isExisting: true,
+                ...data,
+                clicks: existing ? existing.clicks : 0
+            };
+
+            const success = await GPStorage.saveProduct(payload, password);
+            if (success) {
                 GPToast.show("Produk berhasil diperbarui!");
+            } else {
+                return;
             }
         } else {
-            // Create
-            state.products.unshift({
+            const payload = {
                 id: GPUtils.uniqueId(),
+                _isExisting: false,
                 ...data,
                 clicks: 0
-            });
-            GPToast.show("Produk baru berhasil ditambahkan!");
+            };
+
+            const success = await GPStorage.saveProduct(payload, password);
+            if (success) {
+                GPToast.show("Produk baru berhasil ditambahkan!");
+            } else {
+                return;
+            }
         }
 
-        GPStorage.save(state.products);
         resetForm();
-        renderStats();
-        renderCategoryOptions();
-        renderProductList();
+        loadAndRender();
     }
 
     async function handleDelete(id) {
@@ -298,12 +306,14 @@
         );
         if (!ok) return;
 
-        state.products = state.products.filter(x => x.id !== id);
-        GPStorage.save(state.products);
-        renderStats();
-        renderCategoryOptions();
-        renderProductList();
-        GPToast.show("Produk berhasil dihapus!");
+        const password = GPAuth.getPassword();
+        const success = await GPStorage.remove(id, password);
+        if (success) {
+            GPToast.show("Produk berhasil dihapus!");
+            loadAndRender();
+        } else {
+            GPToast.show("Gagal menghapus produk", "error");
+        }
     }
 
     /* =========================================================
@@ -408,12 +418,14 @@
                 return;
             }
 
-            state.products = newProducts;
-            GPStorage.save(state.products);
-            renderStats();
-            renderCategoryOptions();
-            renderProductList();
-            GPToast.show(`${newProducts.length} produk berhasil di-impor dari CSV!`);
+            const password = GPAuth.getPassword();
+            const success = await GPStorage.saveAll(newProducts, password);
+            if (success) {
+                loadAndRender();
+                GPToast.show(`${newProducts.length} produk berhasil di-impor dari CSV!`);
+            } else {
+                GPToast.show("Gagal menyimpan data CSV ke server", "error");
+            }
         } catch (err) {
             console.error("CSV parse error:", err);
             GPToast.show("Gagal memparsing file CSV", "error");
@@ -447,12 +459,14 @@
             return;
         }
 
-        state.products = result.products;
-        GPStorage.save(state.products);
-        renderStats();
-        renderCategoryOptions();
-        renderProductList();
-        GPToast.show(`${result.products.length} produk berhasil di-import!`);
+        const password = GPAuth.getPassword();
+        const success = await GPStorage.saveAll(result.products, password);
+        if (success) {
+            loadAndRender();
+            GPToast.show(`${result.products.length} produk berhasil di-import!`);
+        } else {
+            GPToast.show("Gagal menyimpan data import ke server", "error");
+        }
     }
 
     async function handleReset() {
@@ -462,12 +476,14 @@
         );
         if (!ok) return;
 
-        GPStorage.clear();
-        state.products = [];
-        renderStats();
-        renderCategoryOptions();
-        renderProductList();
-        GPToast.show("Semua data berhasil direset");
+        const password = GPAuth.getPassword();
+        const success = await GPStorage.clearAll(password);
+        if (success) {
+            loadAndRender();
+            GPToast.show("Semua data berhasil direset");
+        } else {
+            GPToast.show("Gagal mereset data", "error");
+        }
     }
 
     /* =========================================================

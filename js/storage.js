@@ -1,17 +1,10 @@
 /* =========================================================
-   GATE O ID — Storage
-   Wrapper buat localStorage dengan validasi & normalisasi.
+   GATE O ID — Storage (API / Netlify Database Backend)
    ========================================================= */
 
 window.GPStorage = (function () {
     "use strict";
 
-    const KEY = window.GATEO_CONFIG.STORAGE_KEY_PRODUCTS;
-
-    /**
-     * Normalisasi produk: pastiin semua field ada dengan tipe yang bener.
-     * Ini penting biar import JSON yang jelek nggak ngerusak app.
-     */
     function normalizeProduct(p) {
         if (!p || typeof p !== "object") return null;
         if (!p.title || !p.link) return null;
@@ -29,65 +22,127 @@ window.GPStorage = (function () {
     }
 
     /**
-     * Load products dari localStorage.
-     * Kalau kosong / corrupt, return default.
+     * Load products from API backend.
      */
-    function load(defaultProducts = []) {
+    async function load(defaultProducts = []) {
         try {
-            const raw = localStorage.getItem(KEY);
-            if (!raw) return [...defaultProducts];
+            const res = await fetch("/api/products");
+            if (!res.ok) throw new Error("Gagal mengambil data dari server");
+            const data = await res.json();
+            if (!Array.isArray(data)) return [...defaultProducts];
 
-            const parsed = JSON.parse(raw);
-            if (!Array.isArray(parsed)) throw new Error("Bukan array");
-
-            const normalized = parsed
-                .map(normalizeProduct)
-                .filter(Boolean); // buang yang null
-
-            // Kalau semua item invalid, fallback ke default
-            if (normalized.length === 0 && parsed.length > 0) {
-                console.warn("Semua produk invalid, fallback ke default");
-                return [...defaultProducts];
-            }
-
-            return normalized;
+            const normalized = data.map(normalizeProduct).filter(Boolean);
+            return normalized.length > 0 ? normalized : [...defaultProducts];
         } catch (e) {
-            console.error("Load error:", e);
+            console.error("Load error from API:", e);
             return [...defaultProducts];
         }
     }
 
     /**
-     * Save products ke localStorage.
+     * Save/Create or Update product via API.
      */
-    function save(products) {
+    async function saveProduct(product, password) {
         try {
-            localStorage.setItem(KEY, JSON.stringify(products));
+            const isUpdate = Boolean(product.id && product._isExisting);
+            const method = isUpdate ? "PUT" : "POST";
+            const res = await fetch("/api/products", {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Admin-Password": password
+                },
+                body: JSON.stringify(product)
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Gagal menyimpan");
             return true;
         } catch (e) {
-            console.error("Save error:", e);
-            // Bisa jadi quota exceeded
-            if (e.name === "QuotaExceededError") {
-                window.GPToast.show("Penyimpanan penuh. Hapus produk lama dulu.", "error");
-            }
+            console.error("Save product error:", e);
+            window.GPToast?.show(e.message || "Gagal menyimpan ke server", "error");
             return false;
         }
     }
 
     /**
-     * Clear semua data.
+     * Save all products (batch import / replace).
      */
-    function clear() {
+    async function saveAll(products, password) {
         try {
-            localStorage.removeItem(KEY);
+            const normalized = products.map(normalizeProduct).filter(Boolean);
+            const res = await fetch("/api/products", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Admin-Password": password
+                },
+                body: JSON.stringify({ products: normalized })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Gagal menyimpan batch");
             return true;
-        } catch {
+        } catch (e) {
+            console.error("Save all error:", e);
+            window.GPToast?.show(e.message || "Gagal menyimpan ke server", "error");
             return false;
         }
     }
 
     /**
-     * Export ke file JSON.
+     * Delete product by ID.
+     */
+    async function remove(id, password) {
+        try {
+            const res = await fetch(`/api/products?id=${encodeURIComponent(id)}`, {
+                method: "DELETE",
+                headers: {
+                    "X-Admin-Password": password
+                }
+            });
+            if (!res.ok) throw new Error("Gagal menghapus produk");
+            return true;
+        } catch (e) {
+            console.error("Delete error:", e);
+            return false;
+        }
+    }
+
+    /**
+     * Clear all products.
+     */
+    async function clearAll(password) {
+        try {
+            const res = await fetch("/api/products?all=true", {
+                method: "DELETE",
+                headers: {
+                    "X-Admin-Password": password
+                }
+            });
+            if (!res.ok) throw new Error("Gagal mereset data");
+            return true;
+        } catch (e) {
+            console.error("Clear error:", e);
+            return false;
+        }
+    }
+
+    /**
+     * Increment click count on server.
+     */
+    async function incrementClick(id) {
+        try {
+            await fetch("/api/click", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+        } catch (e) {
+            console.error("Click track error:", e);
+        }
+    }
+
+    /**
+     * Export to file JSON.
      */
     function exportToFile(products) {
         const data = JSON.stringify(products, null, 2);
@@ -103,8 +158,7 @@ window.GPStorage = (function () {
     }
 
     /**
-     * Import dari file JSON.
-     * Return Promise<{success, products?, error?}>
+     * Import from file JSON.
      */
     function importFromFile(file) {
         return new Promise((resolve) => {
@@ -149,8 +203,11 @@ window.GPStorage = (function () {
 
     return {
         load,
-        save,
-        clear,
+        saveProduct,
+        saveAll,
+        remove,
+        clearAll,
+        incrementClick,
         exportToFile,
         importFromFile,
         normalizeProduct

@@ -37,12 +37,8 @@ window.GPProducts = (function () {
     ];
 
     /* ---------- Load products ---------- */
-    function init() {
-        state.products = GPStorage.load(DEFAULT_PRODUCTS);
-        // Simpan ke localStorage kalau baru pertama kali
-        if (state.products.length > 0 && !localStorage.getItem(window.GATEO_CONFIG.STORAGE_KEY_PRODUCTS)) {
-            GPStorage.save(state.products);
-        }
+    async function init() {
+        state.products = await GPStorage.load(DEFAULT_PRODUCTS);
         renderCategories();
         renderGrid();
     }
@@ -186,7 +182,7 @@ window.GPProducts = (function () {
         const idx = state.products.findIndex(p => p.id === id);
         if (idx === -1) return;
         state.products[idx].clicks = (state.products[idx].clicks || 0) + 1;
-        GPStorage.save(state.products);
+        GPStorage.incrementClick(id);
     }, window.GATEO_CONFIG.CLICK_THROTTLE_MS);
 
     /* ---------- Share ---------- */
