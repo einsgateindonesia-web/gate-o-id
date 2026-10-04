@@ -419,6 +419,8 @@
             GPToast.show("Gagal memparsing file CSV", "error");
         }
     }
+
+    async function handleImport(e) {
         const file = e.target.files[0];
         if (!file) return;
 

@@ -1,0 +1,8 @@
+{
+  "name": "GATE O ID — Premium Affiliate Hub",
+  "description": "Temukan rekomendasi produk pilihan terbaik dan penawaran eksklusif hanya di GATE O ID.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

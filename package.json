@@ -1,0 +1,14 @@
+{
+  "name": "gate-o-id",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GATE O ID — Premium Affiliate Hub",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node -e \"console.log('Build succeeded')\""
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
