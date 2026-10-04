@@ -10,13 +10,11 @@ window.GATEO_CONFIG = {
     
     // UI constants
     ALL_CATEGORY: "Semua",
-    DEFAULT_IMAGE: "https://via.placeholder.com/400x300/1e293b/64748b?text=No+Image",
+    DEFAULT_IMAGE: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250' width='100%25' height='100%25'%3E%3Crect width='400' height='250' fill='%230a0a0c'/%3E%3Ccircle cx='200' cy='110' r='36' fill='%2317171c' stroke='%2326262e' stroke-width='2'/%3E%3Cpath d='M188 122l8-10 6 7 10-13 14 16H174z' fill='%2330D158' opacity='0.7'/%3E%3Ccircle cx='188' cy='98' r='4' fill='%2330D158'/%3E%3Ctext x='200' y='170' font-size='12' font-family='-apple-system, sans-serif' font-weight='500' fill='%23737373' text-anchor='middle'%3EGATE O ID &bull; Curated Item%3C/text%3E%3C/svg%3E",
     
     // Admin
-    // ⚠️ PENTING: Ganti password ini sebelum deploy!
-    // Catatan: ini bukan security beneran — client-side.
-    // Buat security serius, butuh backend auth.
-    ADMIN_PASSWORD_HASH: "gateo2025", // Ganti dengan password lu
+    // Catatan: client-side session demo hash
+    ADMIN_PASSWORD_HASH: "gateo2025",
     
     // Session (dalam menit)
     SESSION_DURATION_MINUTES: 60,

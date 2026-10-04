@@ -1,11 +1,77 @@
 /* =========================================================
-   GATE O ID — Custom Styles
-   Pelengkap Tailwind. Semua class Tailwind tetap jalan.
+   GATE O ID — Apple Dark Clean Design System
+   Refined OLED aesthetics, Frosted Glass, and SF-inspired interactions.
    ========================================================= */
 
-/* ---------- Scrollbar hide utility ---------- */
+:root {
+    --bg-oled: #000000;
+    --bg-surface: rgba(255, 255, 255, 0.035);
+    --bg-surface-hover: rgba(255, 255, 255, 0.065);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.16);
+    --apple-emerald: #30D158;
+    --apple-emerald-glow: rgba(48, 209, 88, 0.15);
+}
+
+/* ---------- Typography & Global Smoothing ---------- */
+html {
+    background-color: #000000;
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    background-color: #000000;
+    overflow-x: hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* ---------- Apple Frosted Glass Utilities ---------- */
+.apple-glass {
+    background: rgba(12, 12, 14, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border-subtle);
+}
+
+.apple-glass-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-glass-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 
+                0 0 24px 0 var(--apple-emerald-glow),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Scrollbar Styling ---------- */
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
 
 /* ---------- Line clamp ---------- */
 .line-clamp-2 {
@@ -15,52 +81,83 @@
     overflow: hidden;
 }
 
-/* ---------- Toast ---------- */
+/* ---------- Apple Floating Toast ---------- */
 .toast {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgb(15 23 42);
-    border: 1px solid rgba(34, 197, 94, 0.5);
-    color: white;
-    padding: 12px 16px;
-    border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+    bottom: 28px;
+    right: 28px;
+    background: rgba(20, 20, 23, 0.88);
+    backdrop-filter: blur(20px) saturate(190%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #f5f5f7;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     gap: 10px;
     z-index: 9999;
-    transform: translateY(120%);
+    transform: translateY(140%) scale(0.96);
     opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     max-width: calc(100vw - 40px);
 }
 
 .toast.show {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
+    pointer-events: auto;
 }
 
 .toast.error {
-    border-color: rgba(244, 63, 94, 0.5);
+    border-color: rgba(255, 69, 58, 0.35);
+    background: rgba(28, 14, 16, 0.92);
 }
 
 .toast.warning {
-    border-color: rgba(251, 191, 36, 0.5);
+    border-color: rgba(255, 214, 10, 0.35);
+    background: rgba(28, 24, 14, 0.92);
 }
 
 .toast span {
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
-/* ---------- Focus visible (accessibility) ---------- */
+/* ---------- Focus visible (accessibility with Apple elegance) ---------- */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
-    outline: 2px solid #22c55e;
-    outline-offset: 2px;
+select:focus-visible,
+textarea:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(48, 209, 88, 0.5), 0 0 12px rgba(48, 209, 88, 0.2);
+}
+
+/* ---------- Subtle Glow & Lighting Effects ---------- */
+.apple-spotlight {
+    position: absolute;
+    width: 650px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(48, 209, 88, 0.08) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---------- Mobile: toast centering ---------- */
+@media (max-width: 480px) {
+    .toast {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        justify-content: center;
+    }
 }
 
 /* ---------- Reduce motion ---------- */
@@ -68,14 +165,5 @@ select:focus-visible {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
-    }
-}
-
-/* ---------- Mobile: toast full width ---------- */
-@media (max-width: 480px) {
-    .toast {
-        left: 16px;
-        right: 16px;
-        bottom: 16px;
     }
 }

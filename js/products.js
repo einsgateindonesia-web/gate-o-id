@@ -1,5 +1,6 @@
 /* =========================================================
    GATE O ID — Products Logic (Public Page)
+   Apple Dark Clean Bento Layout & Interaction Engine
    ========================================================= */
 
 window.GPProducts = (function () {
@@ -18,21 +19,31 @@ window.GPProducts = (function () {
             id: "sample-1",
             title: "Mouse Wireless Ergonomis Silent Click",
             category: "Elektronik",
-            image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=60",
+            image: "/src/assets/images/mouse_wireless_silent_1791083289266.jpg",
             link: "https://shopee.co.id",
             badge: "Hot Item",
-            desc: "Nyaman digunakan seharian tanpa suara klik yang mengganggu.",
-            clicks: 12
+            desc: "Presisi tinggi tanpa suara klik bising, kenyamanan maksimal untuk workstation modern.",
+            clicks: 42
         },
         {
             id: "sample-2",
-            title: "Botol Minum Stainless Steel 1 Liter",
-            category: "Gaya Hidup",
-            image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=60",
+            title: "Mechanical Keyboard Pro Wireless 75%",
+            category: "Elektronik",
+            image: "/src/assets/images/keyboard_mechanical_pro_1791083334000.jpg",
             link: "https://tokopedia.com",
             badge: "Rekomendasi",
-            desc: "Menjaga suhu dingin dan panas hingga 12 jam.",
-            clicks: 8
+            desc: "Desain aluminium solid dengan low-latency Bluetooth & 2.4GHz, typing feel tak tertandingi.",
+            clicks: 35
+        },
+        {
+            id: "sample-3",
+            title: "Botol Minum Stainless Steel 1 Liter Matte",
+            category: "Gaya Hidup",
+            image: "/src/assets/images/bottle_thermal_matte_1791083305805.jpg",
+            link: "https://tokopedia.com",
+            badge: "Promo",
+            desc: "Isolasi termal ganda menjaga suhu dingin dan panas hingga 24 jam dengan material food grade.",
+            clicks: 28
         }
     ];
 
@@ -47,7 +58,7 @@ window.GPProducts = (function () {
         renderGrid();
     }
 
-    /* ---------- Render kategori ---------- */
+    /* ---------- Render kategori (Apple Segmented Style) ---------- */
     function renderCategories() {
         const container = document.getElementById("categoryContainer");
         if (!container) return;
@@ -65,10 +76,10 @@ window.GPProducts = (function () {
                 <button
                     type="button"
                     data-category="${safeCat}"
-                    class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
+                    class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 ${
                         isActive
-                            ? "bg-brand-600 text-white shadow-lg shadow-brand-600/20"
-                            : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
+                            ? "bg-white text-black font-semibold shadow-sm scale-[1.02]"
+                            : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
                     }"
                     aria-pressed="${isActive}">
                     ${safeCat}
@@ -98,13 +109,12 @@ window.GPProducts = (function () {
             } else if (state.sortOption === "title-asc") {
                 return a.title.localeCompare(b.title);
             } else {
-                // newest: urutan di array atau berdasarkan id/waktu masuk
-                return 0; // pertahankan urutan penyimpanan default (terbaru di atas jika unshifted)
+                return 0; // newest: urutan penyimpanan default
             }
         });
     }
 
-    /* ---------- Render grid produk ---------- */
+    /* ---------- Render Bento Grid Produk ---------- */
     function renderGrid() {
         const grid = document.getElementById("productGrid");
         const emptyState = document.getElementById("emptyState");
@@ -122,7 +132,7 @@ window.GPProducts = (function () {
 
         grid.innerHTML = filtered.map(p => {
             const safeTitle = GPUtils.escapeHtml(p.title);
-            const safeDesc = GPUtils.escapeHtml(p.desc || "Tidak ada deskripsi.");
+            const safeDesc = GPUtils.escapeHtml(p.desc || "Kurasi produk terpilih dengan spesifikasi dan ulasan terpercaya.");
             const safeCategory = GPUtils.escapeHtml(p.category);
             const safeBadge = GPUtils.escapeHtml(p.badge || "");
             const safeImg = GPUtils.safeUrl(p.image) || window.GATEO_CONFIG.DEFAULT_IMAGE;
@@ -133,46 +143,57 @@ window.GPProducts = (function () {
             const linkDisabled = !safeLink;
 
             return `
-                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-slate-700 transition-all duration-300 flex flex-col group">
-                    <div class="relative h-48 bg-slate-950 overflow-hidden">
+                <div class="apple-glass-card rounded-3xl overflow-hidden flex flex-col group relative">
+                    <!-- Image Showcase -->
+                    <div class="relative aspect-[16/10] bg-neutral-950 overflow-hidden border-b border-white/[0.06]">
                         <img src="${safeImg}" alt="${safeTitle}" loading="lazy" decoding="async"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                              onerror="this.src='${window.GATEO_CONFIG.DEFAULT_IMAGE}'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none"></div>
 
-                        ${safeBadge ? `
-                            <span class="absolute top-3 left-3 bg-brand-500/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                                ${safeBadge}
+                        <!-- Apple Floating Badges -->
+                        <div class="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
+                            ${safeBadge ? `
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/60 backdrop-blur-md text-brand-400 border border-brand-500/30 shadow-sm flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+                                    ${safeBadge}
+                                </span>
+                            ` : '<span></span>'}
+
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-medium bg-black/60 backdrop-blur-md text-neutral-300 border border-white/[0.1] shadow-sm">
+                                ${safeCategory}
                             </span>
-                        ` : ""}
-
-                        <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-slate-300 text-[10px] font-medium px-2.5 py-1 rounded-full border border-slate-700/50">
-                            ${safeCategory}
-                        </span>
+                        </div>
                     </div>
 
-                    <div class="p-5 flex-1 flex flex-col">
-                        <h3 class="font-semibold text-slate-100 text-base mb-1 line-clamp-2 group-hover:text-brand-500 transition-colors">
-                            ${safeTitle}
-                        </h3>
-                        <p class="text-xs text-slate-400 mb-4 line-clamp-2 flex-1">${safeDesc}</p>
+                    <!-- Card Body -->
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-semibold text-white text-base sm:text-lg mb-2 line-clamp-2 group-hover:text-brand-400 transition-colors duration-200 tracking-tight leading-snug">
+                                ${safeTitle}
+                            </h3>
+                            <p class="text-xs text-neutral-400 line-clamp-2 mb-5 leading-relaxed font-normal">
+                                ${safeDesc}
+                            </p>
+                        </div>
 
-                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                        <!-- Action Bar -->
+                        <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between gap-2.5">
                             ${linkDisabled
-                                ? `<span class="flex-1 bg-slate-800 text-slate-500 text-xs font-semibold py-2.5 px-4 rounded-xl text-center cursor-not-allowed">Link Invalid</span>`
+                                ? `<span class="flex-1 bg-white/[0.04] text-neutral-500 text-xs font-medium py-2.5 px-4 rounded-xl text-center cursor-not-allowed border border-white/[0.04]">Tautan Tidak Aktif</span>`
                                 : `<a href="${safeLink}" target="_blank" rel="noopener noreferrer"
                                      data-track-id="${safeId}"
-                                     class="product-link flex-1 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold py-2.5 px-4 rounded-xl text-center transition shadow-lg shadow-brand-600/10 flex items-center justify-center gap-2">
-                                    <span>Cek Produk</span>
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                     class="product-link flex-1 bg-white text-black hover:bg-neutral-200 active:scale-[0.98] text-xs font-semibold py-2.5 px-4 rounded-xl text-center transition-all duration-200 shadow-sm flex items-center justify-center gap-2">
+                                    <span>Buka Produk</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
                                   </a>`
                             }
                             <button type="button"
                                     data-share-title="${safeTitle}"
                                     data-share-link="${safeLink}"
-                                    class="share-btn p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition border border-slate-700"
+                                    class="share-btn p-2.5 bg-white/[0.05] hover:bg-white/[0.12] active:scale-[0.95] text-neutral-300 hover:text-white rounded-xl transition-all duration-200 border border-white/[0.08]"
                                     title="Bagikan" aria-label="Bagikan produk">
-                                <i class="fa-solid fa-share-nodes text-xs"></i>
+                                <i class="fa-solid fa-arrow-up-from-bracket text-xs"></i>
                             </button>
                         </div>
                     </div>
@@ -204,10 +225,9 @@ window.GPProducts = (function () {
                 });
             } else {
                 await navigator.clipboard.writeText(link);
-                GPToast.show("Link produk berhasil disalin!");
+                GPToast.show("Tautan produk berhasil disalin!");
             }
         } catch (err) {
-            // User cancel share — diem aja
             if (err.name !== "AbortError") {
                 console.warn("Share error:", err);
             }

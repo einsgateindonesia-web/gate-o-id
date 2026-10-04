@@ -1,5 +1,6 @@
 /* =========================================================
    GATE O ID — Admin Panel Logic
+   macOS Window Inspector & Catalog Management
    ========================================================= */
 
 (function () {
@@ -48,7 +49,7 @@
     }
 
     /* =========================================================
-       Confirm Dialog (custom, bukan window.confirm)
+       Confirm Dialog (macOS sheet style)
        ========================================================= */
     let confirmResolver = null;
 
@@ -92,9 +93,9 @@
         if (GPAuth.login(pass)) {
             els.loginError.classList.add("hidden");
             showApp();
-            GPToast.show("Login berhasil");
+            GPToast.show("Autentikasi admin berhasil");
         } else {
-            els.loginError.textContent = "Password salah. Coba lagi.";
+            els.loginError.textContent = "Kata sandi salah. Silakan coba lagi.";
             els.loginError.classList.remove("hidden");
             els.loginPassword.value = "";
             els.loginPassword.focus();
@@ -104,7 +105,7 @@
     function handleLogout() {
         GPAuth.logout();
         showLogin();
-        GPToast.show("Berhasil logout");
+        GPToast.show("Sesi admin telah diakhiri");
     }
 
     /* =========================================================
@@ -124,21 +125,23 @@
         const totalCategories = new Set(state.products.map(p => p.category)).size;
 
         const stats = [
-            { icon: "fa-box", label: "Total Produk", value: GPUtils.formatNumber(state.products.length), color: "text-brand-500" },
-            { icon: "fa-hand-pointer", label: "Total Klik", value: GPUtils.formatNumber(totalClicks), color: "text-blue-400" },
-            { icon: "fa-tags", label: "Kategori", value: GPUtils.formatNumber(totalCategories), color: "text-amber-400" },
+            { icon: "fa-box-archive", label: "Total Produk", value: GPUtils.formatNumber(state.products.length), color: "text-brand-400" },
+            { icon: "fa-arrow-pointer", label: "Total Klik", value: GPUtils.formatNumber(totalClicks), color: "text-blue-400" },
+            { icon: "fa-layer-group", label: "Kategori", value: GPUtils.formatNumber(totalCategories), color: "text-amber-400" },
             { icon: "fa-fire", label: "Produk Populer", value: state.products.length ? GPUtils.escapeHtml(
                 state.products.reduce((max, p) => (p.clicks || 0) > (max.clicks || 0) ? p : max, state.products[0]).title
-              ).slice(0, 20) : "-", color: "text-rose-400" }
+              ).slice(0, 18) : "-", color: "text-rose-400" }
         ];
 
         els.statsGrid.innerHTML = stats.map(s => `
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="fa-solid ${s.icon} ${s.color} text-xs"></i>
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500 font-medium">${s.label}</span>
+            <div class="apple-glass rounded-2xl p-4 sm:p-5 border border-white/[0.08] relative overflow-hidden group">
+                <div class="flex items-center justify-between mb-2 sm:mb-3">
+                    <span class="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold">${s.label}</span>
+                    <div class="w-6 h-6 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-[10px] ${s.color}">
+                        <i class="fa-solid ${s.icon}"></i>
+                    </div>
                 </div>
-                <p class="text-lg font-bold text-white truncate">${s.value}</p>
+                <p class="text-xl sm:text-2xl font-bold font-mono tabular-nums text-white truncate tracking-tight">${s.value}</p>
             </div>
         `).join("");
     }
@@ -160,9 +163,12 @@
 
         if (state.products.length === 0) {
             els.adminProductList.innerHTML = `
-                <div class="text-center py-8 text-slate-500 text-sm">
-                    <i class="fa-solid fa-inbox text-2xl mb-2 opacity-50"></i>
-                    <p>Belum ada produk. Tambahin yang pertama!</p>
+                <div class="text-center py-12 text-neutral-500 text-xs">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-neutral-400 mb-3">
+                        <i class="fa-solid fa-box-open text-base opacity-60"></i>
+                    </div>
+                    <p class="font-medium text-neutral-300">Belum ada produk di katalog</p>
+                    <p class="text-[11px] text-neutral-400 mt-1">Tambahkan produk pertama menggunakan formulir di atas.</p>
                 </div>
             `;
             return;
@@ -175,27 +181,29 @@
             const safeId = GPUtils.escapeHtml(p.id);
 
             return `
-                <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <img src="${safeImg}" loading="lazy" alt=""
-                             class="w-10 h-10 object-cover rounded-lg bg-slate-900 flex-shrink-0"
-                             onerror="this.src='${window.GATEO_CONFIG.DEFAULT_IMAGE}'">
+                <div class="apple-glass-card p-3 sm:p-3.5 rounded-2xl flex items-center justify-between gap-3 border border-white/[0.06] hover:border-white/[0.14] transition-all duration-200">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="w-11 h-11 rounded-xl bg-neutral-900 border border-white/[0.08] overflow-hidden flex-shrink-0">
+                            <img src="${safeImg}" loading="lazy" alt=""
+                                 class="w-full h-full object-cover"
+                                 onerror="this.src='${window.GATEO_CONFIG.DEFAULT_IMAGE}'">
+                        </div>
                         <div class="truncate">
-                            <h4 class="text-xs font-medium text-slate-200 truncate">${safeTitle}</h4>
-                            <div class="flex items-center gap-2 text-[10px] text-slate-500 mt-0.5">
+                            <h4 class="text-xs font-semibold text-white truncate tracking-tight">${safeTitle}</h4>
+                            <div class="flex items-center gap-2 text-[11px] text-neutral-400 mt-0.5">
                                 <span>${safeCat}</span>
-                                <span>•</span>
-                                <span class="text-brand-500">${GPUtils.formatNumber(p.clicks || 0)} Klik</span>
+                                <span class="text-neutral-600">&middot;</span>
+                                <span class="text-brand-400 font-mono tabular-nums font-medium">${GPUtils.formatNumber(p.clicks || 0)} Klik</span>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-1 flex-shrink-0">
                         <button type="button" data-action="edit" data-id="${safeId}"
-                                class="p-1.5 text-slate-400 hover:text-amber-400 transition" title="Edit">
-                            <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                class="p-2 text-neutral-400 hover:text-white hover:bg-white/[0.08] rounded-xl transition" title="Edit">
+                            <i class="fa-solid fa-pen text-xs"></i>
                         </button>
                         <button type="button" data-action="delete" data-id="${safeId}"
-                                class="p-1.5 text-slate-400 hover:text-rose-500 transition" title="Hapus">
+                                class="p-2 text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition" title="Hapus">
                             <i class="fa-solid fa-trash text-xs"></i>
                         </button>
                     </div>
@@ -294,7 +302,7 @@
 
         const ok = await showConfirm(
             "Hapus Produk?",
-            `"${GPUtils.truncate(p.title, 60)}" bakal dihapus permanen.`
+            `"${GPUtils.truncate(p.title, 60)}" akan dihapus secara permanen.`
         );
         if (!ok) return;
 
@@ -311,11 +319,11 @@
        ========================================================= */
     function handleExport() {
         if (state.products.length === 0) {
-            GPToast.show("Belum ada produk buat di-export", "warning");
+            GPToast.show("Belum ada produk untuk diekspor", "warning");
             return;
         }
         GPStorage.exportToFile(state.products);
-        GPToast.show("Backup berhasil di-download!");
+        GPToast.show("File backup JSON berhasil diunduh!");
     }
 
     async function handleCsvImport(e) {
@@ -399,8 +407,8 @@
             }
 
             const ok = await showConfirm(
-                "Impor CSV?",
-                `Ditemukan ${newProducts.length} produk dari CSV. Ganti semua produk saat ini dengan data CSV?`
+                "Impor Data CSV?",
+                `Ditemukan ${newProducts.length} produk dari CSV. Ganti seluruh daftar produk dengan data ini?`
             );
 
             if (!ok) {
@@ -413,10 +421,10 @@
             renderStats();
             renderCategoryOptions();
             renderProductList();
-            GPToast.show(`${newProducts.length} produk berhasil di-impor dari CSV!`);
+            GPToast.show(`${newProducts.length} produk berhasil diimpor dari CSV!`);
         } catch (err) {
             console.error("CSV parse error:", err);
-            GPToast.show("Gagal memparsing file CSV", "error");
+            GPToast.show("Gagal memproses file CSV", "error");
         }
     }
 
@@ -425,7 +433,7 @@
         if (!file) return;
 
         document.body.style.cursor = "wait";
-        GPToast.show("Memproses import...");
+        GPToast.show("Memproses berkas JSON...");
 
         const result = await GPStorage.importFromFile(file);
 
@@ -438,12 +446,12 @@
         }
 
         const ok = await showConfirm(
-            "Import Data?",
-            `Ini bakal GANTI ${state.products.length} produk sekarang dengan ${result.products.length} produk dari file. Lanjut?`
+            "Impor Backup JSON?",
+            `Tindakan ini akan menggantikan ${state.products.length} produk saat ini dengan ${result.products.length} produk dari cadangan. Lanjutkan?`
         );
 
         if (!ok) {
-            GPToast.show("Import dibatalkan", "warning");
+            GPToast.show("Impor dibatalkan", "warning");
             return;
         }
 
@@ -452,13 +460,13 @@
         renderStats();
         renderCategoryOptions();
         renderProductList();
-        GPToast.show(`${result.products.length} produk berhasil di-import!`);
+        GPToast.show(`${result.products.length} produk berhasil dipulihkan!`);
     }
 
     async function handleReset() {
         const ok = await showConfirm(
             "Reset Semua Data?",
-            "Semua produk bakal dihapus dan nggak bisa dikembalikan. Yakin?"
+            "Semua katalog produk akan dihapus dan tidak dapat dikembalikan. Yakin?"
         );
         if (!ok) return;
 

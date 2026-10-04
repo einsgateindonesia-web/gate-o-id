@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#020617">
+    <meta name="theme-color" content="#000000">
     <title>GATE O ID — Premium Affiliate Hub</title>
     
     <!-- SEO & Social Media -->
@@ -14,25 +14,35 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2316a34a'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'>G</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23000000'/><rect x='2' y='2' width='96' height='96' rx='22' fill='none' stroke='%2330D158' stroke-width='4'/><text x='50' y='69' font-size='56' font-weight='700' text-anchor='middle' fill='%2330D158' font-family='-apple-system, BlinkMacSystemFont, sans-serif'>G</text></svg>">
     
-    <!-- Tailwind CDN (dev mode) -->
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <!-- Tailwind Config -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Plus Jakarta Sans"', '"SF Pro Text"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    },
                     colors: {
                         brand: {
-                            50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e',
-                            600: '#16a34a', 700: '#15803d', 900: '#14532d',
+                            50: '#f0fdf4',
+                            400: '#34d399',
+                            500: '#30D158',
+                            600: '#28cd41',
+                            700: '#22ad37',
+                            900: '#064e3b'
                         }
                     }
                 }
@@ -43,94 +53,131 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+<body class="bg-black text-neutral-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-black relative">
 
-    <!-- Navbar -->
-    <header class="sticky top-0 z-40 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
+    <!-- Subtle Ambient Glow -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 apple-spotlight pointer-events-none"></div>
+
+    <!-- Apple Minimalist Top Bar -->
+    <header class="sticky top-0 z-40 apple-glass border-b border-white/[0.08] transition-all">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/20">
-                    G
+            <!-- Brand Mark -->
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-b from-white/[0.12] to-white/[0.02] border border-white/[0.15] flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:border-brand-500/50 transition-all duration-300">
+                    <span class="text-brand-500 font-bold">G</span>
                 </div>
-                <div>
-                    <span class="text-lg font-bold tracking-wider bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">GATE O ID</span>
-                    <span class="block text-[10px] text-brand-500 font-medium tracking-widest uppercase -mt-1">Affiliate Hub</span>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-semibold tracking-tight text-white group-hover:text-brand-400 transition-colors">GATE O ID</span>
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                    </div>
+                    <span class="text-[10px] text-neutral-400 tracking-wider font-medium">Curated Affiliate Hub</span>
                 </div>
             </a>
 
-            <div class="flex items-center gap-2">
-                <a href="admin.html" class="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-lock text-brand-500"></i>
+            <!-- Right Action: Admin Access -->
+            <div class="flex items-center gap-3">
+                <a href="admin.html" class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] active:scale-[0.98] border border-white/[0.1] hover:border-white/[0.2] text-neutral-300 hover:text-white rounded-full transition-all flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-lock text-[10px] text-brand-500"></i>
                     <span>Admin</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="relative py-10 px-4 sm:px-6 text-center overflow-hidden">
-        <div class="absolute inset-0 -z-10 flex items-center justify-center">
-            <div class="w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-3xl"></div>
-        </div>
+    <!-- Hero Section (Apple Pro Keynote Style) -->
+    <section class="relative pt-12 pb-8 px-4 sm:px-6 text-center z-10">
         <div class="max-w-3xl mx-auto">
-            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
-                Rekomendasi Produk <span class="bg-gradient-to-r from-brand-500 to-emerald-400 bg-clip-text text-transparent">Pilihan Terbaik</span>
+            <!-- Kicker -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] font-medium text-neutral-300 mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+                <span>Koleksi Pilihan &middot; Terkurasi Eksklusif</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-[1.12]" style="text-wrap: balance;">
+                Rekomendasi Produk <br class="hidden sm:inline">
+                <span class="bg-gradient-to-r from-neutral-100 via-neutral-300 to-neutral-500 bg-clip-text text-transparent">Pilihan Terbaik.</span>
             </h1>
-            <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-6">
-                Temukan berbagai produk berkualitas tinggi dengan penawaran dan diskon menarik yang sudah kami seleksi.
+
+            <p class="text-neutral-400 text-sm sm:text-base max-w-xl mx-auto mb-8 font-normal leading-relaxed">
+                Produk berkelas dengan ulasan autentik dan penawaran terbaik langsung dari mitra terpercaya kami.
             </p>
 
-            <!-- Search -->
-            <div class="max-w-md mx-auto relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                <input type="text" id="searchInput" placeholder="Cari produk atau rekomendasi..." 
+            <!-- Search Field (Apple Glass Inset) -->
+            <div class="max-w-lg mx-auto relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-500 group-focus-within:text-brand-500 transition-colors">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Cari nama produk, spesifikasi, atau rekomendasi..." 
                        autocomplete="off" spellcheck="false"
-                       class="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                       class="w-full bg-neutral-900/60 backdrop-blur-xl border border-white/[0.1] rounded-2xl pl-11 pr-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500/80 focus:ring-1 focus:ring-brand-500/50 shadow-inner transition duration-200">
             </div>
         </div>
     </section>
 
-    <!-- Filters & Sorting -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div id="categoryContainer" class="flex items-center justify-start gap-2 overflow-x-auto pb-2 scrollbar-none flex-1 w-full sm:w-auto">
+    <!-- Category Filters & Sorting Rail -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 z-10">
+        <!-- Segmented Category Scroll -->
+        <div id="categoryContainer" class="flex items-center justify-start gap-1.5 overflow-x-auto pb-2 scrollbar-none flex-1 w-full sm:w-auto p-1 bg-neutral-900/40 border border-white/[0.06] rounded-2xl backdrop-blur-md">
             <!-- Rendered by JS -->
         </div>
-        <div class="flex items-center gap-2 self-end sm:self-auto min-w-[180px]">
-            <span class="text-xs text-slate-400 whitespace-nowrap"><i class="fa-solid fa-sort mr-1 text-brand-500"></i> Urutkan:</span>
-            <select id="sortSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500 transition">
-                <option value="newest">Terbaru</option>
-                <option value="popular">Paling Sering Diklik</option>
-                <option value="title-asc">Nama (A-Z)</option>
-            </select>
+
+        <!-- Sort Select -->
+        <div class="flex items-center gap-2.5 self-end sm:self-auto min-w-[190px] shrink-0">
+            <span class="text-xs text-neutral-400 whitespace-nowrap flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-down-short-wide text-brand-500 text-[11px]"></i> Urutkan:
+            </span>
+            <div class="relative w-full">
+                <select id="sortSelect" class="w-full bg-neutral-900/80 border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-brand-500 transition cursor-pointer appearance-none pr-8">
+                    <option value="newest">Terbaru</option>
+                    <option value="popular">Paling Banyak Diklik</option>
+                    <option value="title-asc">Nama (A &rarr; Z)</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-neutral-400">
+                    <i class="fa-solid fa-chevron-down text-[9px]"></i>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Products -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 flex-1 mb-16 w-full">
+    <!-- Bento Product Catalog -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 flex-1 mb-20 w-full z-10">
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <div id="emptyState" class="hidden text-center py-16">
-            <i class="fa-solid fa-box-open text-4xl text-slate-600 mb-3"></i>
-            <h3 class="text-lg font-medium text-slate-300">Produk Tidak Ditemukan</h3>
-            <p class="text-slate-500 text-sm">Coba kata kunci lain atau pilih kategori berbeda.</p>
+        <!-- Apple-like Empty State -->
+        <div id="emptyState" class="hidden text-center py-20 px-4 rounded-3xl apple-glass border border-white/[0.06] max-w-md mx-auto my-8">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-neutral-400 mb-4">
+                <i class="fa-solid fa-magnifying-glass text-lg"></i>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-1">Produk Tidak Ditemukan</h3>
+            <p class="text-neutral-400 text-xs leading-relaxed max-w-xs mx-auto">
+                Coba gunakan kata kunci pencarian yang lebih umum atau pilih filter kategori lain.
+            </p>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-8">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-slate-500 text-xs mb-2">&copy; <span id="year"></span> GATE O ID. All rights reserved.</p>
-            <p class="text-slate-500 text-[11px]">Situs ini mengandalkan link afiliasi. Kami mungkin menerima komisi untuk pembelian yang dibuat melalui link tersebut.</p>
+    <!-- Apple-style Clean Footer -->
+    <footer class="border-t border-white/[0.08] bg-black/80 backdrop-blur-xl py-10 z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center space-y-3">
+            <div class="flex items-center justify-center gap-2 text-xs font-medium text-neutral-400">
+                <span>&copy; <span id="year"></span> GATE O ID</span>
+                <span>&middot;</span>
+                <span class="text-neutral-400">Premium Curations</span>
+            </div>
+            <p class="text-neutral-500 text-[11px] max-w-xl mx-auto leading-relaxed">
+                Situs ini memuat tautan afiliasi resmi. Kami berpotensi menerima komisi tanpa tambahan biaya untuk Anda saat Anda melakukan transaksi melalui tautan yang disediakan.
+            </p>
         </div>
     </footer>
 
-    <!-- Toast -->
+    <!-- Apple Floating Toast Pill -->
     <div id="toast" class="toast" role="status" aria-live="polite">
-        <i class="fa-solid fa-circle-check text-brand-500 text-lg"></i>
+        <i class="fa-solid fa-circle-check text-brand-500 text-base"></i>
         <span id="toastMessage">Notifikasi</span>
     </div>
 
-    <!-- Scripts (urutan penting!) -->
+    <!-- Scripts (urutan penting) -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/toast.js"></script>

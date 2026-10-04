@@ -1,27 +1,38 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#020617">
+    <meta name="theme-color" content="#000000">
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Panel — GATE O ID</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2316a34a'/><text x='50' y='72' font-size='60' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'>G</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23000000'/><rect x='2' y='2' width='96' height='96' rx='22' fill='none' stroke='%2330D158' stroke-width='4'/><text x='50' y='69' font-size='56' font-weight='700' text-anchor='middle' fill='%2330D158' font-family='-apple-system, BlinkMacSystemFont, sans-serif'>G</text></svg>">
     
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Plus Jakarta Sans"', '"SF Pro Text"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    },
                     colors: {
                         brand: {
-                            50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e',
-                            600: '#16a34a', 700: '#15803d', 900: '#14532d',
+                            50: '#f0fdf4',
+                            400: '#34d399',
+                            500: '#30D158',
+                            600: '#28cd41',
+                            700: '#22ad37',
+                            900: '#064e3b'
                         }
                     }
                 }
@@ -31,81 +42,100 @@
     
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen antialiased">
+<body class="bg-black text-neutral-100 font-sans min-h-screen antialiased selection:bg-brand-500 selection:text-black relative">
 
-    <!-- Login Gate -->
-    <div id="loginGate" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 w-full max-w-sm shadow-2xl">
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-brand-500/30 mb-4">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <h1 class="text-xl font-bold text-white">Admin Panel</h1>
-                <p class="text-slate-500 text-xs mt-1">Masuk buat kelola produk</p>
+    <!-- Subtle Ambient Glow -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 apple-spotlight pointer-events-none"></div>
+
+    <!-- Login Gate (Apple Glass Card) -->
+    <div id="loginGate" class="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="apple-glass rounded-3xl p-8 sm:p-10 w-full max-w-sm shadow-2xl border border-white/[0.12] text-center">
+            <!-- macOS Lock Emblem -->
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-b from-white/[0.1] to-white/[0.02] border border-white/[0.16] flex items-center justify-center text-brand-500 text-xl shadow-lg mb-5">
+                <i class="fa-solid fa-lock"></i>
             </div>
             
-            <form id="loginForm" class="space-y-3">
+            <h1 class="text-xl font-bold tracking-tight text-white mb-1">Admin Panel</h1>
+            <p class="text-neutral-400 text-xs mb-6">Autentikasi sesi untuk kelola katalog</p>
+            
+            <form id="loginForm" class="space-y-4 text-left">
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
+                    <label class="block text-[11px] font-medium text-neutral-400 mb-1.5 uppercase tracking-wider">Kata Sandi</label>
                     <input type="password" id="loginPassword" required autocomplete="current-password"
-                           placeholder="Masukkan password admin"
-                           class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                           placeholder="Masukkan kata sandi admin"
+                           class="w-full bg-neutral-900/80 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                 </div>
-                <p id="loginError" class="hidden text-xs text-rose-500"></p>
-                <button type="submit" class="w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-lg transition">
+                
+                <p id="loginError" class="hidden text-xs text-rose-400 font-medium"></p>
+                
+                <button type="submit" class="w-full py-2.5 bg-white text-black hover:bg-neutral-200 active:scale-[0.98] text-sm font-semibold rounded-xl transition duration-200 shadow-md">
                     Masuk
                 </button>
             </form>
             
-            <div class="mt-6 pt-6 border-t border-slate-800 text-center">
-                <a href="index.html" class="text-xs text-slate-500 hover:text-slate-300 transition">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Balik ke Beranda
+            <div class="mt-8 pt-5 border-t border-white/[0.08]">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                    <span>Kembali ke Beranda</span>
                 </a>
             </div>
         </div>
     </div>
 
     <!-- Admin App (hidden by default) -->
-    <div id="adminApp" class="hidden min-h-screen flex flex-col">
+    <div id="adminApp" class="hidden min-h-screen flex flex-col relative z-10">
         
-        <!-- Navbar -->
-        <header class="sticky top-0 z-40 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <!-- macOS Style Header Bar -->
+        <header class="sticky top-0 z-40 apple-glass border-b border-white/[0.08]">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+                <!-- Left: macOS Window Traffic Lights + Brand -->
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold">
-                        G
+                    <div class="flex items-center gap-1.5 mr-2">
+                        <span class="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50"></span>
+                        <span class="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50"></span>
                     </div>
+                    <div class="h-4 w-px bg-white/[0.12] hidden sm:block"></div>
                     <div>
-                        <span class="text-sm font-bold text-white">GATE O ID</span>
-                        <span class="block text-[10px] text-brand-500 font-medium tracking-widest uppercase -mt-0.5">Admin Panel</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-sm font-bold text-white tracking-tight">GATE O ID</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 font-semibold border border-brand-500/20">Admin</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Right Actions -->
                 <div class="flex items-center gap-2">
-                    <a href="index.html" class="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg transition flex items-center gap-2">
-                        <i class="fa-solid fa-eye text-brand-500"></i>
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-neutral-300 hover:text-white rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-globe text-[11px] text-brand-500"></i>
                         <span class="hidden sm:inline">Lihat Website</span>
                     </a>
-                    <button id="logoutBtn" class="px-3 py-1.5 text-xs font-medium bg-slate-900 hover:bg-rose-900/40 border border-slate-700 hover:border-rose-800 text-slate-300 hover:text-rose-300 rounded-lg transition flex items-center gap-2">
-                        <i class="fa-solid fa-right-from-bracket"></i>
+                    <button id="logoutBtn" class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.04] hover:bg-rose-500/20 border border-white/[0.08] hover:border-rose-500/30 text-neutral-300 hover:text-rose-300 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-[11px]"></i>
                         <span class="hidden sm:inline">Keluar</span>
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- Content -->
-        <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <!-- Main Content -->
+        <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
             
-            <!-- Stats -->
-            <div id="statsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <!-- Rendered by JS -->
+            <!-- Bento Stats Grid -->
+            <div>
+                <h3 class="text-xs uppercase tracking-wider font-semibold text-neutral-400 mb-3 px-1">Ringkasan Metrik</h3>
+                <div id="statsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                    <!-- Rendered by JS -->
+                </div>
             </div>
 
-            <!-- Add/Edit Form -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fa-solid fa-plus-circle text-brand-500"></i>
-                    <h2 id="formTitle" class="font-bold text-white">Tambah Produk Baru</h2>
+            <!-- Add / Edit Form Panel -->
+            <section class="apple-glass rounded-3xl p-6 sm:p-7 border border-white/[0.08] shadow-xl">
+                <div class="flex items-center gap-2.5 mb-5 pb-4 border-b border-white/[0.06]">
+                    <div class="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 text-xs">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <h2 id="formTitle" class="font-bold text-white tracking-tight text-base">Tambah Produk Baru</h2>
                 </div>
 
                 <form id="productForm" class="space-y-4">
@@ -113,109 +143,126 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Nama Produk *</label>
-                            <input type="text" id="prodTitle" required maxlength="120" placeholder="Contoh: Lampu LED Desk"
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">Nama Produk <span class="text-brand-500">*</span></label>
+                            <input type="text" id="prodTitle" required maxlength="120" placeholder="Contoh: Mechanical Keyboard Wireless"
+                                   class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Kategori *</label>
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">Kategori <span class="text-brand-500">*</span></label>
                             <input type="text" id="prodCategory" required maxlength="40" list="categoryOptions" placeholder="Contoh: Elektronik"
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                                   class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                             <datalist id="categoryOptions"></datalist>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">URL Gambar</label>
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">URL Gambar</label>
                             <input type="url" id="prodImage" placeholder="https://..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                                   class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Link Afiliasi *</label>
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">Link Afiliasi <span class="text-brand-500">*</span></label>
                             <input type="url" id="prodLink" required placeholder="https://shope.ee/..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                                   class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Badge Khusus</label>
-                            <select id="prodBadge" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
-                                <option value="">Tanpa Badge</option>
-                                <option value="Hot Item">🔥 Hot Item</option>
-                                <option value="Rekomendasi">⭐ Rekomendasi</option>
-                                <option value="Promo">🏷️ Promo Limit</option>
-                            </select>
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">Badge Khusus</label>
+                            <div class="relative">
+                                <select id="prodBadge" class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner appearance-none cursor-pointer pr-8">
+                                    <option value="">Tanpa Badge</option>
+                                    <option value="Hot Item">🔥 Hot Item</option>
+                                    <option value="Rekomendasi">⭐ Rekomendasi</option>
+                                    <option value="Promo">🏷️ Promo Limit</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </div>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Deskripsi Singkat</label>
-                            <input type="text" id="prodDesc" maxlength="200" placeholder="Kualitas bagus, tahan lama..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-500">
+                            <label class="block text-xs font-medium text-neutral-400 mb-1.5">Deskripsi Singkat</label>
+                            <input type="text" id="prodDesc" maxlength="200" placeholder="Kualitas premium, tahan lama, review terbaik..." 
+                                   class="w-full bg-neutral-900/70 border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner">
                         </div>
                     </div>
 
-                    <div class="flex gap-2 justify-end pt-2">
-                        <button type="button" id="cancelFormBtn" class="px-4 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">Batal</button>
-                        <button type="submit" class="px-4 py-2 text-xs font-medium bg-brand-600 hover:bg-brand-500 text-white rounded-lg transition">Simpan Produk</button>
+                    <div class="flex gap-2.5 justify-end pt-3">
+                        <button type="button" id="cancelFormBtn" class="px-4 py-2 text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 rounded-xl transition">Batal</button>
+                        <button type="submit" class="px-5 py-2 text-xs font-semibold bg-white text-black hover:bg-neutral-200 active:scale-[0.98] rounded-xl transition shadow-sm">Simpan Produk</button>
                     </div>
                 </form>
             </section>
 
-            <!-- Backup / Restore -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-3">
+            <!-- Backup / Restore / CSV Tools (macOS Utility Ribbon) -->
+            <section class="apple-glass rounded-3xl p-5 sm:p-6 border border-white/[0.08] flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-sm font-semibold text-slate-200">Backup / Restore / CSV</h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Ekspor/Impor JSON atau Impor langsung dari Spreadsheet (CSV).</p>
+                    <h3 class="text-sm font-semibold text-white tracking-tight">Sinkronisasi Data & Spreadsheet</h3>
+                    <p class="text-xs text-neutral-400 mt-0.5">Ekspor backup JSON atau impor langsung dari file CSV Excel/Sheets.</p>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <button id="exportBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-download"></i> Ekspor JSON
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="exportBtn" class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] text-neutral-200 rounded-xl border border-white/[0.1] transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download text-[11px] text-neutral-400"></i>
+                        <span>Ekspor JSON</span>
                     </button>
-                    <label class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition cursor-pointer flex items-center gap-1.5">
-                        <i class="fa-solid fa-upload"></i> Impor JSON
+                    <label class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.06] hover:bg-white/[0.12] text-neutral-200 rounded-xl border border-white/[0.1] transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-upload text-[11px] text-neutral-400"></i>
+                        <span>Impor JSON</span>
                         <input type="file" id="importFile" accept=".json,application/json" class="hidden">
                     </label>
-                    <label class="px-3 py-1.5 text-xs bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 rounded-lg border border-emerald-800/80 transition cursor-pointer flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-csv"></i> Impor CSV
+                    <label class="px-3.5 py-1.5 text-xs font-medium bg-brand-500/10 hover:bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/20 transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-csv text-[11px]"></i>
+                        <span>Impor CSV</span>
                         <input type="file" id="importCsvFile" accept=".csv,text/csv" class="hidden">
                     </label>
-                    <button id="resetBtn" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-rose-900/40 text-slate-200 hover:text-rose-300 rounded-lg border border-slate-700 hover:border-rose-800 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    <button id="resetBtn" class="px-3.5 py-1.5 text-xs font-medium bg-white/[0.04] hover:bg-rose-500/20 text-neutral-300 hover:text-rose-300 rounded-xl border border-white/[0.08] hover:border-rose-500/30 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-rotate-left text-[11px]"></i>
+                        <span>Reset</span>
                     </button>
                 </div>
             </section>
 
-            <!-- Product List -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-semibold text-slate-200">Daftar Produk</h3>
-                    <span id="productCount" class="text-xs text-slate-500"></span>
+            <!-- Product List Panel -->
+            <section class="apple-glass rounded-3xl p-6 sm:p-7 border border-white/[0.08] shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.06]">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-sm font-semibold text-white tracking-tight">Katalog Produk</h3>
+                    </div>
+                    <span id="productCount" class="text-xs font-mono text-neutral-400 bg-white/[0.04] px-2.5 py-1 rounded-full border border-white/[0.06]">0 produk</span>
                 </div>
-                <div id="adminProductList" class="space-y-2"></div>
+                <div id="adminProductList" class="space-y-2.5">
+                    <!-- Rendered by JS -->
+                </div>
             </section>
 
         </main>
     </div>
 
-    <!-- Toast -->
+    <!-- Apple Floating Toast Pill -->
     <div id="toast" class="toast" role="status" aria-live="polite">
-        <i class="fa-solid fa-circle-check text-brand-500 text-lg"></i>
+        <i class="fa-solid fa-circle-check text-brand-500 text-base"></i>
         <span id="toastMessage">Notifikasi</span>
     </div>
 
-    <!-- Confirm Modal -->
-    <div id="confirmModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
-            <h3 id="confirmTitle" class="font-bold text-white mb-2">Konfirmasi</h3>
-            <p id="confirmMessage" class="text-sm text-slate-400 mb-5">Yakin?</p>
-            <div class="flex gap-2 justify-end">
-                <button id="confirmCancel" class="px-4 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">Batal</button>
-                <button id="confirmOk" class="px-4 py-2 text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition">Ya, Lanjut</button>
+    <!-- Apple macOS Modal Sheet -->
+    <div id="confirmModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden transition-opacity duration-200">
+        <div class="apple-glass rounded-3xl p-6 sm:p-7 w-full max-w-sm shadow-2xl border border-white/[0.12] transform transition-all duration-200 scale-100">
+            <div class="w-10 h-10 rounded-2xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-white mb-4">
+                <i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm"></i>
+            </div>
+            <h3 id="confirmTitle" class="font-bold text-white text-base mb-1.5 tracking-tight">Konfirmasi Tindakan</h3>
+            <p id="confirmMessage" class="text-xs text-neutral-400 mb-6 leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex gap-2.5 justify-end">
+                <button id="confirmCancel" class="px-4 py-2 text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 rounded-xl transition">Batal</button>
+                <button id="confirmOk" class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-500 text-white rounded-xl transition shadow-sm">Ya, Lanjutkan</button>
             </div>
         </div>
     </div>
 
+    <!-- Scripts (urutan penting) -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/toast.js"></script>
